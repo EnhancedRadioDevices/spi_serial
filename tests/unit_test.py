@@ -44,7 +44,7 @@ def cmd4(ss, chan):
         return 0
 
 
-def cmd5(ss, chan, other):  #Test incomplete
+def cmd5(ss, chan, other):  # Test incomplete
     print("Command 5: Send and Listen")
     timeout = struct.pack("<I", int(2222))
     cmd = [5, chan, 0, 0, chan]
@@ -73,19 +73,19 @@ if __name__ == "__main__":
     # possible options:
     # - receive first (-r)
     order.add_argument('-r', '--receive', action='store_true',
-        help='set device to receive test message first')
+                       help='set device to receive test message first')
 
     # - transmit first (-t)
     order.add_argument('-t', '--transmit', action='store_true',
-        help='set device to transmit test message first')
+                       help='set device to transmit test message first')
 
     # - select channel (--c)
     parser.add_argument('--c', dest='channel', default=0, type=int,
-        help='set rx/tx channel')
+                        help='set rx/tx channel')
 
     # - select number of send/receive (or recive/send) cycles
     parser.add_argument("-s", '--send_receive', type=int, default=10,
-        help='select # of send/receive cycles')
+                        help='select # of send/receive cycles')
 
     args = parser.parse_args()
     print(args)
@@ -114,13 +114,14 @@ if __name__ == "__main__":
     ss.inWaiting()
     resp = ss.read(0)
 #    print(resp)
-    if resp != [115, 117, 98, 103, 95, 114, 102, 115, 112, 121, 32, 48, 46, 56, 0]:
+    if resp != [115, 117, 98, 103, 95, 114, 102, 
+	            115, 112, 121, 32, 48, 46, 56, 0]:
         print("Failed")
         failures += 1
     else:
         print("Success")
 
-    for num in range(0,args.send_receive):
+    for num in range(0, args.send_receive):
         if args.receive:
             print("Receive/Send cycle #" + str(num+1))
             result0 = cmd3(ss, args.channel, 4)
@@ -139,8 +140,9 @@ if __name__ == "__main__":
             result2 = cmd3(ss, args.channel, 4)
             failures += result2
             time.sleep(1)
-        else: 
-            print("No Send/Receive order argument provided. Skipping Commands 3,4,5. See --help for more information.")
+        else:
+            print("No Send/Receive order argument provided. " + 
+			      "Skipping Commands 3,4,5. See --help for more information.")
 
     print("Command 6: Update Register")
     cmd = [9, 10]
@@ -198,7 +200,7 @@ if __name__ == "__main__":
     ss.inWaiting()
     print("")
 
-    if failures==0:
+    if failures == 0:
         print("If LED0 (D3) is lit, Unit Test was succcessful!")
     else:
         print("Unit Test failed. See above for more information.")
