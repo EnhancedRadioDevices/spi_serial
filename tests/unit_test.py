@@ -9,7 +9,7 @@ def send_get_pkt_cmd(ss, chan, timeout):
     cmd = [3, chan]
     cmd.extend(timeout)
     ss.write(cmd)
-	
+    
 def cmd3(ss, chan, other):
     while True:
         print("Command 3: Receive")
@@ -28,7 +28,7 @@ def cmd3(ss, chan, other):
 
 def cmd4(ss, chan):
     print("Command 4: Send")
-    cmd = [4,chan,0,0,4,4,4,0]
+    cmd = [4, chan, 0, 0, 4, 4, 4, 0]
     ss.write(cmd)
     while ss.inWaiting() == 0:
         time.sleep(1)
@@ -41,12 +41,13 @@ def cmd4(ss, chan):
         print("Success")
         return 0
 
+
 def cmd5(ss, chan, other): #Test incomplete
     print("Command 5: Send and Listen")
     timeout = struct.pack("<I", int(2222))
     cmd = [5,chan,0,0,chan]
-    cmd.extend([timeout,0,5,5,5,0])
-#	255,0,5,5,5,0]
+    cmd.extend([timeout, 0, 5, 5, 5, 0])
+    #255,0,5,5,5,0]
     ss.write(cmd)
     print("waiting for pkt")
     while ss.inWaiting() == 0:
@@ -151,7 +152,7 @@ if __name__ == "__main__":
         new = old - 1
     else:
         new = old + 1
-    cmd = [6,10,new]
+    cmd = [6, 10, new]
     ss.write(cmd)
     ss.inWaiting()
     resp = ss.read(0)
@@ -163,7 +164,7 @@ if __name__ == "__main__":
         print("Success")
 
     print("Command 9: Read Register")
-    cmd = [9,10]
+    cmd = [9, 10]
     ss.write(cmd)
     ss.inWaiting()
     resp = ss.read(0)
@@ -179,7 +180,7 @@ if __name__ == "__main__":
     time.sleep(1)
     ss.inWaiting()
     resp = ss.read(0)
-    cmd = [9,10]
+    cmd = [9, 10]
     ss.write(cmd)
     ss.inWaiting()
     resp = ss.read(0)
@@ -190,7 +191,7 @@ if __name__ == "__main__":
         print("Success")
 
     print("Command 8: LED Control")
-    cmd = [8,0,1]
+    cmd = [8, 0, 1]
     ss.write(cmd)
     ss.inWaiting()
     print("")
