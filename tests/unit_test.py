@@ -9,7 +9,8 @@ def send_get_pkt_cmd(ss, chan, timeout):
     cmd = [3, chan]
     cmd.extend(timeout)
     ss.write(cmd)
-    
+
+
 def cmd3(ss, chan, other):
     while True:
         print("Command 3: Receive")
@@ -25,6 +26,7 @@ def cmd3(ss, chan, other):
         else:
             print("Failure")
             return 1
+
 
 def cmd4(ss, chan):
     print("Command 4: Send")
@@ -42,12 +44,12 @@ def cmd4(ss, chan):
         return 0
 
 
-def cmd5(ss, chan, other): #Test incomplete
+def cmd5(ss, chan, other):  #Test incomplete
     print("Command 5: Send and Listen")
     timeout = struct.pack("<I", int(2222))
-    cmd = [5,chan,0,0,chan]
+    cmd = [5, chan, 0, 0, chan]
     cmd.extend([timeout, 0, 5, 5, 5, 0])
-    #255,0,5,5,5,0]
+    # 255,0,5,5,5,0]
     ss.write(cmd)
     print("waiting for pkt")
     while ss.inWaiting() == 0:
@@ -71,19 +73,19 @@ if __name__ == "__main__":
     # possible options:
     # - receive first (-r)
     order.add_argument('-r', '--receive', action='store_true',
-                        help='set device to receive test message first')
+        help='set device to receive test message first')
 
     # - transmit first (-t)
     order.add_argument('-t', '--transmit', action='store_true',
-                        help='set device to transmit test message first')
+        help='set device to transmit test message first')
 
     # - select channel (--c)
     parser.add_argument('--c', dest='channel', default=0, type=int,
-                        help='set rx/tx channel')
+        help='set rx/tx channel')
 
     # - select number of send/receive (or recive/send) cycles
     parser.add_argument("-s", '--send_receive', type=int, default=10,
-                        help='select # of send/receive cycles')
+        help='select # of send/receive cycles')
 
     args = parser.parse_args()
     print(args)
@@ -121,20 +123,20 @@ if __name__ == "__main__":
     for num in range(0,args.send_receive):
         if args.receive:
             print("Receive/Send cycle #" + str(num+1))
-            result0 = cmd3(ss,args.channel,4)
+            result0 = cmd3(ss, args.channel, 4)
             failures += result0
             time.sleep(1)
 #            result1 = cmd5(ss,args.channel,4)
 #            failures += result1
-            result2 = cmd4(ss,args.channel)
+            result2 = cmd4(ss, args.channel)
             failures += result2
         elif args.transmit:
             print("Send/Receive cycle #" + str(num+1))
 #            result0 = cmd5(ss,args.channel,5)
 #            failures += result0
-            result1 = cmd4(ss,args.channel)
+            result1 = cmd4(ss, args.channel)
             failures += result1
-            result2 = cmd3(ss,args.channel,4)
+            result2 = cmd3(ss, args.channel, 4)
             failures += result2
             time.sleep(1)
         else: 
