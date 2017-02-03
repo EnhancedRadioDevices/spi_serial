@@ -1,8 +1,6 @@
 
 Intel Edison Software Library for 915MHz Explorer Block
 
-This software is still in progress. Check back later
-
 This software is released under the MIT license. See the accompanying
 LICENSE.txt for more details.
 
@@ -71,19 +69,17 @@ Explorer board, you may need to use different pin numbers.
 
 # Testing
 
-Once you have the Explorer software and firmware loaded, you should be able to run the Explorer hardware test script to verify that everything is working. You can do this as follows:
+Once you have the Explorer software and firmware loaded, you should be able to run the Explorer hardware test script to verify that everything is working. Unit tests can be run as follows:
 
     cd ~/src/spi_serial/tests
-    python ExplorerTest.py
-    
-This should return an OK message and blink the two user LEDs on the Explorer board. If that happens, your board is working well.
+    python unit_test.py
 
 If you have two Explorers and would like to perform a more thorough test you can perform the following steps:
 1. Plug battery into Explorer. The PWR LED should light up.
 2. Connect USB into the UART port. The PWR LED should stay lit and the CHRG LED should light up (battery should be allowed to partially discharge beforehad to test CHRG)
 3. Run the following commands:
 
-	cd ~/src/915MHzEdisonExplorer_SW/Examples/Wireless
+	cd ~/src/spi_serial/examples/Wireless
 	python RemoteLEDs.py
 	
 This should return a message about finding the CC1110 and indicate that it is waiting for a packet.
@@ -99,3 +95,13 @@ The first Explorer should print the received packet preceeded by RSSI and packet
 
 If every step gave the described results then your board is working well.
 
+# Examples
+
+There are also some examples that you can look at to see how to use the library. The best place to start is probably:
+
+    cd ~/src/spi_serial/examples
+    python ExplorerTest.py
+    
+This should return an OK message and blink the two user LEDs on the Explorer board. If that happens, your board is working well.
+
+There's also a set of examples showing how to use the Edison/Explorer system as a BLE to 915MHz bridge. You can find those in spi_serial/examples/WirelessSerial
