@@ -114,8 +114,8 @@ if __name__ == "__main__":
     ss.inWaiting()
     resp = ss.read(0)
 #    print(resp)
-    if resp != [115, 117, 98, 103, 95, 114, 102, 
-	            115, 112, 121, 32, 48, 46, 56, 0]:
+    if resp != [115, 117, 98, 103, 95, 114, 102,
+                115, 112, 121, 32, 48, 46, 56, 0]:
         print("Failed")
         failures += 1
     else:
@@ -141,8 +141,8 @@ if __name__ == "__main__":
             failures += result2
             time.sleep(1)
         else:
-            print("No Send/Receive order argument provided. " + 
-			      "Skipping Commands 3,4,5. See --help for more information.")
+            print("No Send/Receive order argument provided. " +
+                  "Skipping Commands 3,4,5. See --help for more information.")
 
     print("Command 6: Update Register")
     cmd = [9, 10]
