@@ -73,6 +73,47 @@ Once you have the Explorer software and firmware loaded, you should be able to r
 
     cd ~/src/spi_serial/tests
     python unit_test.py
+	
+The unit test checks to make sure the different commands function properly. After testing each function it will state whether it was a success or failure. At the end of the test it will print a summary and indicate if any of the commands failed.
+This test script can take some optional arguments.
+
+## Channel Selection (-c)
+
+Select which channel to test the transmit/receive functions on. If not specified, this option defaults to '0'. For example:
+
+    python unit_test.py -c 13
+
+## Transmit/Receive Order ([-t|-r])
+
+This option is for if you have two Explorers and want to test their transmit/receive functionality. If not specified, the test will skip testing transmit/receive functionality.
+
+Start the test script for the receiving Explorer first. For example:
+
+	python unit_test -r
+
+Then, on the other Explorer:
+
+	python unit_test -t
+	
+## Transceive Cycles (-s)
+
+This option sets the number of transmit/receive cycles to test, if a transmit/receive order has also been selected. This option defaults to '10' if not specified. For example:
+
+	python unit_test -r -s 42
+
+This will run through 42 transmit/receive cycles. If a different value is chosen for each Explorer, then the test will not complete successfully.
+
+
+# Examples
+
+There are also some examples that you can look at to see how to use the library. The best place to start is probably:
+
+    cd ~/src/spi_serial/examples
+    python ExplorerTest.py
+    
+This should return an OK message and blink the two user LEDs on the Explorer board. If that happens, your board is working well.
+
+There's also a set of examples showing how to use the Edison/Explorer system as a BLE to 915MHz bridge. You can find those in spi_serial/examples/WirelessSerial
 
 If you have two Explorers and would like to perform a more thorough test you can perform the following steps:
 1. Plug battery into Explorer. The PWR LED should light up.
@@ -94,14 +135,3 @@ The first Explorer should print the received packet preceeded by RSSI and packet
 6. Remove the battery. The PWR and D2 LEDs should remain lit. The volume "Edison" should remain available.
 
 If every step gave the described results then your board is working well.
-
-# Examples
-
-There are also some examples that you can look at to see how to use the library. The best place to start is probably:
-
-    cd ~/src/spi_serial/examples
-    python ExplorerTest.py
-    
-This should return an OK message and blink the two user LEDs on the Explorer board. If that happens, your board is working well.
-
-There's also a set of examples showing how to use the Edison/Explorer system as a BLE to 915MHz bridge. You can find those in spi_serial/examples/WirelessSerial
