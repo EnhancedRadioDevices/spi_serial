@@ -135,3 +135,24 @@ The first Explorer should print the received packet preceeded by RSSI and packet
 6. Remove the battery. The PWR and D2 LEDs should remain lit. The volume "Edison" should remain available.
 
 If every step gave the described results then your board is working well.
+
+If you have a USB On-The-Go cable or adaptor, you can quickly test the OTG port functionality. 
+1. Connect to your Explorer Board as normal (using the USB UART port) and log in.
+2. Using the USB OTG cable, connect any Android device (such as a phone) to the USB OTG port on the Explorer.
+3. Run the following command:
+
+	lsusb
+
+If your response looks like this: 
+
+	unable to initialize libusb: -99
+
+Try flipping your OTG cable around.
+
+If it working correctly, you should see an output that looks something like this: 
+
+	Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+	Bus 001 Device 004: ID 04e8:686c Samsung Electronics Co., Ltd
+	Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+	
+If you see this, then your USB OTG port is working well.
