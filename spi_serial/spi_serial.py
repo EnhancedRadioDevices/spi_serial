@@ -1,14 +1,17 @@
 import mraa as m
 import time
 
+CS0 = 24 # 23 for Edison
+SPI_FROM_DESC = "spi-raw-0-0" # "spi-raw-5-1" for edison
+RST = 7 # 36 for edison
 
 class SpiSerial():
     def __init__(self):
-        self.cs0 = m.Gpio(23)
+        self.cs0 = m.Gpio(CS0)
         self.cs0.dir(m.DIR_OUT)
         self.cs0.write(1)
 
-        self.dev = m.spiFromDesc("spi-raw-5-1")
+        self.dev = m.spiFromDesc(SPI_FROM_DESC)
         self.dev.frequency(62500)
         self.dev.mode(m.SPI_MODE0)
         self.dev.bitPerWord(8)
@@ -61,7 +64,7 @@ class SpiSerial():
         return len(self.rx_buf)
 
     def reset(self):
-        self.RST = m.Gpio(36)
+        self.RST = m.Gpio(RST)
         self.RST.dir(m.DIR_OUT)
         self.RST.write(0)   # reset the device
         time.sleep(0.01)
