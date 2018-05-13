@@ -4,11 +4,27 @@ import time
 
 class SpiSerial():
     def __init__(self):
-        self.cs0 = m.Gpio(23)
+        # read cpuinfo to determine hw
+        f = file("/proc/cpuinfo")
+        proc = ""
+        for line in f:
+            if "Intel" in line:
+                proc = "Intel"
+                break
+
+        if "Intel" in proc:
+            self.CS0 = 23
+            self.SPI_FROM_DESC = "spi-raw-5-1"
+            self.RST_PIN = 36
+        else: # assume RPi
+            self.CS0 = 24
+            self.SPI_FROM_DEV = "spi-raw-0-0"
+            self.RST_PIN = 7
+        self.cs0 = m.Gpio(self.CS0)
         self.cs0.dir(m.DIR_OUT)
         self.cs0.write(1)
 
-        self.dev = m.spiFromDesc("spi-raw-5-1")
+        self.dev = m.spiFromDesc(self.SPI_FROM_DESC)
         self.dev.frequency(62500)
         self.dev.mode(m.SPI_MODE0)
         self.dev.bitPerWord(8)
@@ -61,7 +77,7 @@ class SpiSerial():
         return len(self.rx_buf)
 
     def reset(self):
-        self.RST = m.Gpio(36)
+        self.RST = m.Gpio(self.RST_PIN)
         self.RST.dir(m.DIR_OUT)
         self.RST.write(0)   # reset the device
         time.sleep(0.01)
