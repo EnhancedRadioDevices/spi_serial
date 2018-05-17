@@ -18,7 +18,7 @@ class SpiSerial():
             self.RST_PIN = 36
         else: # assume RPi
             self.CS0 = 24
-            self.SPI_FROM_DEV = "spi-raw-0-0"
+            self.SPI_FROM_DESC = "spi-raw-0-0"
             self.RST_PIN = 7
         self.cs0 = m.Gpio(self.CS0)
         self.cs0.dir(m.DIR_OUT)
