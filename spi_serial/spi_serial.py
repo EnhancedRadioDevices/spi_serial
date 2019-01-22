@@ -1,42 +1,49 @@
-import mraa as m
+import gpio as g
 import time
+import spidev
 
 
 class SpiSerial():
     def __init__(self):
         # read cpuinfo to determine hw
-        f = file("/proc/cpuinfo")
-        proc = ""
-        for line in f:
-            if "Intel" in line:
-                proc = "Intel"
-                break
+        # f = file("/proc/cpuinfo")
+        # proc = ""
+        # for line in f:
+            # if "Intel" in line:
+                # proc = "Intel"
+                # break
 
-        if "Intel" in proc:
-            self.CS0 = 23
-            self.SPI_FROM_DESC = "spi-raw-5-1"
-            self.RST_PIN = 36
-        else: # assume RPi
-            self.CS0 = 24
-            self.SPI_FROM_DESC = "spi-raw-0-0"
-            self.RST_PIN = 7
-        self.cs0 = m.Gpio(self.CS0)
-        self.cs0.dir(m.DIR_OUT)
-        self.cs0.write(1)
+        # if "Intel" in proc:
+            # self.CS0 = 23
+            # self.SPI_FROM_DESC = "spi-raw-5-1"
+            # self.RST_PIN = 36
+        # else: # assume RPi
+            # self.CS0 = 24
+            # self.SPI_FROM_DESC = "spi-raw-0-0"
+            # self.RST_PIN = 7
+#        self.CS0 = (ord("C") - ord("A")) * 32 + 3 #PC3
+        self.RST_PIN = (ord("E") - ord("A")) * 32 + 8 #PE8
+        
+#        self.cs0 = m.Gpio(self.CS0)
+#        self.cs0.dir(m.DIR_OUT)
+#        self.cs0.write(1)
 
-        self.dev = m.spiFromDesc(self.SPI_FROM_DESC)
-        self.dev.frequency(62500)
-        self.dev.mode(m.SPI_MODE0)
-        self.dev.bitPerWord(8)
+#        self.dev = m.spiFromDesc(self.SPI_FROM_DESC)
+        self.dev = spidev.SpiDev()           # create spi object
+        self.dev.open(0, 0)                  # open spi port 0, device (CS) 0
+        
+#        self.dev.frequency(62500)
+#        self.dev.mode(m.SPI_MODE0)
+#        self.dev.bitPerWord(8)
         self.timeout = 0
         self.rx_buf = []
 
     def spi_xfer(self, b):
         tx = bytearray(1)
         tx[0] = (int('{:08b}'.format(b)[::-1], 2))
-        self.cs0.write(0)
-        rxbuf = self.dev.write(tx)
-        self.cs0.write(1)
+#        self.cs0.write(0)
+        rxbuf = self.dev.xfer(tx)
+#        self.cs0.write(1)
         return (int('{:08b}'.format(rxbuf[0])[::-1], 2))
 
     def close(self):
@@ -77,10 +84,13 @@ class SpiSerial():
         return len(self.rx_buf)
 
     def reset(self):
-        self.RST = m.Gpio(self.RST_PIN)
-        self.RST.dir(m.DIR_OUT)
-        self.RST.write(0)   # reset the device
+        #self.RST = m.Gpio(self.RST_PIN)
+        #self.RST.dir(m.DIR_OUT)
+        #self.RST.write(0)   # reset the device
+        g.setup(self.RST_PIN, g.OUT)
+        g.output(self.RST_PIN, 0)
         time.sleep(0.01)
-        self.RST.write(1)   # let the device out of reset
+        #self.RST.write(1)   # let the device out of reset
+        g.output(self.RST_PIN, 1)
         time.sleep(2.01)    # wait for the CC1110 to come up
         # TODO: change the CC1110 code to not have a 2s delay
