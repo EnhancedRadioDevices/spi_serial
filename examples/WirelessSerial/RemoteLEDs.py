@@ -6,6 +6,7 @@ import time
 
 def send_get_pkt_cmd(ss, chan, timeout):
     timeout = struct.pack("<I", int(timeout))
+    timeout = struct.unpack("<BBBB", timeout)
     cmd = [3, chan]
     cmd.extend(timeout)
     ss.write(cmd)
@@ -22,7 +23,6 @@ if __name__ == "__main__":
                         help='set rx channel')
 
     args = parser.parse_args()
-    print(args.channel)
 
     ss = spi_serial.SpiSerial()
     ss.reset()
@@ -51,5 +51,6 @@ if __name__ == "__main__":
                     # LED cntl packet
                     ss.write(resp[2:5])
                     time.sleep(0.1)
-        except:
+        except Exception as e:
+            print(e)
             break
